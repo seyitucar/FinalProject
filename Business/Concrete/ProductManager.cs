@@ -1,5 +1,5 @@
 ﻿using Business.Abstract;
-using Business.CCS;
+using Business.BusinessAspects.Autofac;
 using Business.Constant;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -27,7 +27,8 @@ namespace Business.Concrete
             _productDal = productDal;
             _categoryService = categoryService;
         }
-
+        //Claim
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -41,7 +42,7 @@ namespace Business.Concrete
             }
             _productDal.Add(product);
 
-            return new SuccussResult(Messages.ProductAdded);
+            return new SuccessResult(Messages.ProductAdded);
    
         }
 
@@ -91,7 +92,7 @@ namespace Business.Concrete
                 {
                     _productDal.Update(product);
 
-                    return new SuccussResult(Messages.ProductAdded);
+                    return new SuccessResult(Messages.ProductAdded);
                 }
 
             }
@@ -105,7 +106,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.ProductCountOfCategoryError);
             }
-            return new SuccussResult();
+            return new SuccessResult();
         }
 
         private IResult CheckIfNameExists(string productName)
@@ -115,7 +116,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
-            return new SuccussResult();
+            return new SuccessResult();
         }
 
         private IResult CheckIfCategoryLimitExceeded()
@@ -125,7 +126,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult(Messages.CategoryLimitExceeded);
             }
-            return new SuccussResult();
+            return new SuccessResult();
         }
     }
 }
